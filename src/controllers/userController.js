@@ -33,6 +33,11 @@ const createNewUser = async (req, res) => {
       return handleResponse(res, 'Email already exists', 400);
     }
 
+    const existingUsername = await userModel.findUserByUsername(username);
+    if (existingUsername[0]) {
+      return handleResponse(res, 'Username already exists', 400);
+    }
+    
     // Enkripsi kata sandi sebelum disimpan ke database
     const hashedPassword = await bcrypt.hash(password, 10);
 
@@ -89,7 +94,7 @@ const changePassword = async (req, res) => {
       return handleResponse(res, 'Old password wrong', 401)
     }
     // Lakukan update jika semua validasi sudah lewat
-    await userModel.updateUserById(decoded.id_user, new_password);
+    await userModel.updatePasswordById(decoded.id_user, new_password);
     handleResponse(res, 'Change password success')
   } catch (error) {
     handleError(res, error)
@@ -130,10 +135,20 @@ const getUserById = async (req, res) => {
   }
 }
 
+const changeRoles = async (req, res) => {
+  const { id_user, roles } = req.body
+  try {
+    await userModel.updateRoleById(id_user, roles)
+    handleResponse(res, 'Change roles user success')
+  } catch (error) {
+    handleError(res, error)
+  }
+}
 
 module.exports = {
   createNewUser,
   changePassword,
+  changeRoles,
   deleteUser,
   getAllUsers,
   getUserById

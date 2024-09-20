@@ -14,10 +14,9 @@ const handleError = (res, error) => {
 };
 
 const newRoom = async (req, res) => {
-  const { room_name, capacity } = req.body;
+  const { room_name, capacity, description } = req.body;
   try {
-    const room = await roomModel.addRoom(room_name, capacity);
-
+    await roomModel.addRoom(room_name, capacity, description);
     handleResponse(res, "Create new room successfully", 200, req.body);
   } catch (error) {
     handleError(res, error);
@@ -38,6 +37,15 @@ const getRooms = async (req, res) => {
   try {
     const rooms = await roomModel.getRoom();
     handleResponse(res, "Sucess", 200, rooms);
+  } catch (error) {
+    handleError(res, error);
+  }
+};
+
+const getRoomsById = async (req, res) => {
+  try {
+    const room = await roomModel.getRoomById(req.params.id);
+    handleResponse(res, "Sucess", 200, room);
   } catch (error) {
     handleError(res, error);
   }
@@ -64,5 +72,6 @@ module.exports = {
   newRoom,
   updateRoom,
   getRooms,
+  getRoomsById,
   deleteRoom,
 };

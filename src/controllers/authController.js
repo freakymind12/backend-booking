@@ -17,13 +17,13 @@ const loginUser = async (req, res) => {
     // Temukan pengguna berdasarkan nama pengguna
     const user = await userModel.findUserByEmail(email);
     if (!user[0]) {
-      return handleResponse(res, 'Authentication failed, please check email and password', 401)
+      return handleResponse(res, 'This email is not registered', 401)
     }
 
     // Verifikasi kata sandi
     const passwordMatch = await bcrypt.compare(password, user[0].password);
     if (!passwordMatch) {
-      return handleResponse(res, 'Password wrong', 401)
+      return handleResponse(res, 'Wrong password', 401)
     }
 
     // Variabel waktu expired token dalam format jam
@@ -63,7 +63,7 @@ const validateToken = async (req, res) => {
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
         // Jika pengguna tidak memiliki peran admin, kembalikan respon error
-        return res.status(200).json({ session: 'active', role: decoded.role, name: decoded.username });
+        return res.status(200).json({ session: 'active', role: decoded.role, name: decoded.username, id: decoded.id_user });
     } catch (error) {
         // Jika terjadi kesalahan dalam verifikasi, tangani kondisi ketika token telah kedaluwarsa
         console.log(error.name)

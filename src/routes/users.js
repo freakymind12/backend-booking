@@ -8,6 +8,7 @@ const router = express.Router();
 
 // PATCH - UPDATE
 router.patch('/password', usersController.changePassword);
+router.patch('/roles', usersController.changeRoles);
 
 // POST - CREATE
 router.post('/signup', [

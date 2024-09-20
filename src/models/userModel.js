@@ -12,15 +12,19 @@ const createUser = async (username, email, hashedPassword, dept) => {
   return true;
 };
 
-const updateUserById = async (userId, password) => {
+const updatePasswordById = async (userId, password) => {
   const hashedPassword = await bcrypt.hash(password, 10); // Enkripsi kata sandi baru
-  // Perbarui data pengguna di database
   await runQuery('UPDATE users SET password = ? WHERE id_user = ?', [ hashedPassword, userId]);
   return true; 
 };
 
+const updateRoleById = async (userId, role) => {
+  await runQuery('UPDATE users SET roles = ? WHERE id_user = ?', [ role, userId]);
+  return true; 
+};
+
 const getAllUsers = async () => {
-  return await runQuery('SELECT id_user,username,email, dept, created_at,updated_at,deleted_at FROM users where deleted_at is null');
+  return await runQuery(`SELECT id_user,username,email, dept,roles, created_at, DATE_FORMAT(updated_at, '%Y-%m-%d %H:%i:%s') AS updated_at,deleted_at FROM users where deleted_at is null `);
 };
 
 const deleteUserById = async (userId) => {
@@ -43,7 +47,8 @@ const findUserById = async (userId) => {
 
 module.exports = {
   createUser,
-  updateUserById,
+  updatePasswordById,
+  updateRoleById,
   getAllUsers,
   deleteUserById,
   findUserByUsername,
