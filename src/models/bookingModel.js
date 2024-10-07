@@ -17,8 +17,8 @@ const addBooking = async (bookingData) => {
 const updateBooking = async (id, bookingData) => {
   const { id_room, meeting_name, start, end, status } = bookingData;
   await runQuery(
-    "UPDATE bookings SET meeting_name = ?, start = ?, end = ?, status = ?,id_room = ? where id_booking  = ?",
-    [meeting_name, start, end, status, id_room, id]
+    "UPDATE bookings SET meeting_name = ?, start = ?, end = ?, status = ?,id_room = ?, status=? where id_booking  = ?",
+    [meeting_name, start, end, status, id_room, status, id]
   );
   return true;
 };

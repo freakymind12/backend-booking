@@ -114,7 +114,6 @@ const getRoomBookingList = async (req, res) => {
   }
 };
 
-
 // DELETE Booking Data
 const deleteBooking = async (req, res) => {
   try {
