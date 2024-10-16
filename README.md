@@ -7,6 +7,7 @@
    - DB_NAME=your_dbname
    - DB_PASSWORD=your_password
    - DB_USERNAME=your_username
+   - DB_PORT=your_db_port
    - PORT=app_port
    - JWT_SECRET=your_secret_key
 4. Jalankan perintah `npm install` untuk menginstal dependensi.
