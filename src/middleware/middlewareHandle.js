@@ -1,9 +1,12 @@
 const jwt = require('jsonwebtoken');
 
 const logRequest = (req, res, next) => {
-  console.log('Log Request to this path', req.path)
-  next()
-}
+  const now = new Date();
+  const formattedTime = now.toLocaleTimeString(); // Contoh format: "HH:MM:SS AM/PM"
+  console.log(`[${formattedTime}] Log Request to this path:`, req.path);
+  next();
+};
+
 
 const errorMessage = (err, req, res, next) => {
   console.error('Error:', err.message);

@@ -66,6 +66,14 @@ const getBookingListByDateRoom = async (id, date, order) => {
   );
 };
 
+const getExpiredBooking = async (now) => {
+  return await runQuery(
+    `SELECT * FROM bookings
+    WHERE status IS NULL AND TIMESTAMPDIFF(MINUTE, start, ?) >= 15`,
+    [now]
+  );
+};
+
 const deleteBooking = async (id) => {
   await runQuery("DELETE FROM bookings WHERE id_booking = ?", [id]);
   return true;
@@ -91,7 +99,6 @@ const validateBooking = async (bookingData) => {
   );
 };
 
-
 module.exports = {
   addBooking,
   updateBooking,
@@ -100,6 +107,7 @@ module.exports = {
   getBookingById,
   getRoomBookingList,
   getBookingListByDateRoom,
+  getExpiredBooking,
   validateBooking,
   deleteBooking,
 };

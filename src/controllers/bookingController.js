@@ -20,7 +20,7 @@ const checkBookingStatus = async (req, res) => {
       handleResponse(res, "Room schedule is clear, you can book now!", 200, {booking:[...validateSide]})
     }
     else{
-      handleResponse(res, "Your room booking time clashes with other", 400, {booking:[...validateSide]});
+      handleResponse(res, "Your room booking time clashes with other", 200, {booking:[...validateSide]});
     }
   } catch (error) {
     handleError(res, error)
@@ -126,6 +126,7 @@ const deleteBooking = async (req, res) => {
   } catch (error) {}
 };
 
+
 module.exports = {
   newBooking,
   updateBooking,
@@ -133,5 +134,5 @@ module.exports = {
   deleteBooking,
   getUserBookings,
   getRoomBookingList,
-  checkBookingStatus
+  checkBookingStatus,
 };
