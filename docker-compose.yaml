@@ -1,0 +1,13 @@
+services:
+  be-booking-room:
+    image: be-booking:1.0.0
+    container_name: be-booking
+    restart: always
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5050:5050"
+    volumes:
+      - .:/app
+      - /app/node_modules
