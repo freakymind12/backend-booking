@@ -6,12 +6,10 @@ WORKDIR /app
 
 # Menyalin package.json dan package-lock.json ke dalam container
 COPY package*.json ./
+COPY .env ./
 
 # Menginstal dependensi
 RUN npm install
-
-# Menyalin semua file proyek ke dalam container
-COPY . .
 
 # Menetapkan port yang akan digunakan
 EXPOSE 5050
