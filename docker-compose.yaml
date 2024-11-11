@@ -10,3 +10,5 @@ services:
       - "5050:5050"
     volumes:
       - ./src:/app
+    environment:
+      - TZ=Asia/Jakarta
