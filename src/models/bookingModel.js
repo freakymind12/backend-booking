@@ -86,16 +86,15 @@ const getBookingById = async (id) => {
 const validateBooking = async (bookingData) => {
   const { id_room, start, end } = bookingData;
   return await runQuery(
-    `SELECT b.*, u.username, u.dept, DATE_FORMAT(b.start, '%Y-%m-%d %H:%i:%s') AS start, DATE_FORMAT(b.end, '%Y-%m-%d %H:%i:%s') AS end
+    `SELECT b.*, u.username, u.dept, 
+      DATE_FORMAT(b.start, '%Y-%m-%d %H:%i:%s') AS start, 
+      DATE_FORMAT(b.end, '%Y-%m-%d %H:%i:%s') AS end
     FROM bookings as b
     INNER JOIN users as u ON b.id_user = u.id_user
     WHERE b.id_room = ?
-      AND (
-        (b.start < ? AND b.end > ?)
-        OR (b.start < ? AND b.end > ?)
-        OR (b.start >= ? AND b.start < ?)
-      )`,
-    [id_room, end, start, start, end, start, end]
+      AND b.start < ?
+      AND b.end > ?`,
+    [id_room, end, start]
   );
 };
 

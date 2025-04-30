@@ -16,11 +16,12 @@ const handleError = (res, error) => {
 const checkBookingStatus = async (req, res) => {
   try {
     const validateSide = await bookingModel.validateBooking(req.query)
-    if(validateSide.length==0){
-      handleResponse(res, "Room schedule is clear, you can book now!", 200, {booking:[...validateSide]})
+
+    if (validateSide.length == 0) {
+      handleResponse(res, "Room schedule is clear, you can book now!", 200, { booking: [...validateSide] })
     }
-    else{
-      handleResponse(res, "Your room booking time clashes with other", 200, {booking:[...validateSide]});
+    else {
+      handleResponse(res, "Your room booking time clashes with other", 200, { booking: [...validateSide] });
     }
   } catch (error) {
     handleError(res, error)
@@ -31,12 +32,11 @@ const checkBookingStatus = async (req, res) => {
 const newBooking = async (req, res) => {
   try {
     const validateSide = await bookingModel.validateBooking(req.body)
-    
-    if(validateSide.length==0){
+    if (validateSide.length == 0) {
       await bookingModel.addBooking(req.body);
       handleResponse(res, "Create new booking room successfully", 200, req.body);
-    }else{
-      handleResponse(res, "Your room booking time clashes with other", 400, {booking:[...validateSide]});
+    } else {
+      handleResponse(res, "Your room booking time clashes with other", 400, { booking: [...validateSide] });
     }
   } catch (error) {
     handleError(res, error);
@@ -81,15 +81,15 @@ const getRoomBookingList = async (req, res) => {
   try {
     const { id_room, date } = req.query;
     const order = req.query.order || 'desc'
-    
+
     let bookingList;
 
     if (!id_room) {
       return handleResponse(res, "Room id is required", 400);
     }
-    
+
     if (date) {
-      
+
       bookingList = await bookingModel.getBookingListByDateRoom(id_room, date, order);
     } else {
       bookingList = await bookingModel.getRoomBookingList(id_room, order);
@@ -123,7 +123,9 @@ const deleteBooking = async (req, res) => {
     } else {
       handleResponse(res, "Booking data not found", 404);
     }
-  } catch (error) {}
+  } catch (error) {
+    return handleError(res, error);
+  }
 };
 
 
