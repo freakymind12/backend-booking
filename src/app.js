@@ -5,9 +5,11 @@ const cookieParser = require('cookie-parser');
 const cors = require('cors');
 
 // IMPORT SCHEDULER
-const { startScheduler } = require('./scheduler/deleteExpiredBooking.js')
+const { autoDeleteExpiredBooking } = require('./scheduler/deleteExpiredBooking')
+const autoSchedule = require('./scheduler/autoSchedule')
 
-startScheduler()
+autoSchedule()
+autoDeleteExpiredBooking()
 
 // IMPORT ROUTES
 const authRoutes = require('./routes/auth.js');
