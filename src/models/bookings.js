@@ -35,7 +35,9 @@ const bookingModel = {
         if (id_user) query.where("b.id_user", id_user)
         if (id_room) query.where("b.id_room", id_room)
         if (date) query.where("b.start", "like", `${date}%`)
-        if (status) query.where("b.status", status)
+        if (status && status !== "All") {
+          query.where("b.status", status)
+        }
       })
   },
 
