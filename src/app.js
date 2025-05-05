@@ -13,11 +13,11 @@ const bookingRoutes = require("./routes/bookings")
 const roomRoutes = require("./routes/rooms")
 
 // IMPORT SERVICES
-const autoDeleteExpiredBooking = require("../src/services/deleteExpiredBooking")
+const autoCancelExpiredBooking = require("./services/autoCancelExpiredBooking")
 const autoBookingSchedule = require("../src/services/autoBooking")
 
 // RUN SERVICES
-autoDeleteExpiredBooking()
+autoCancelExpiredBooking()
 autoBookingSchedule()
 
 // IMPORT MIDDLEWARE

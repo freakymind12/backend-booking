@@ -60,9 +60,14 @@ const bookingModel = {
         dbPool.raw("DATE_FORMAT(b.end, '%Y-%m-%d %H:%i:%s') as end"))
       .join("users as u", "b.id_user", "u.id_user")
       .where("b.id_room", id_room)
+      // Grouping start dan end filter
       .andWhere(function () {
         this.where("b.start", "<", end)  // b.start harus lebih awal dari booking baru berakhir
-          .andWhere("b.end", ">", start);  // b.end harus lebih lambat dari booking baru dimulai
+          .andWhere("b.end", ">", start)  // b.end harus lebih lambat dari booking baru dimulai
+      })
+      // Grouping status filter
+      .andWhere(function () {
+        this.whereNull("b.status").orWhere("b.status", "!=", "Cancel");
       })
       .modify((query) => {
         if (excludeId) {
