@@ -7,7 +7,7 @@ const authController = {
   loginUser: async (req, res) => {
     const { email, password } = req.body;
     try {
-      const [user] = await userModel.getUser({email}, true);
+      const [user] = await userModel.getUser({ email }, true);
       if (!user) {
         return handleResponse(res, "Email is not registered", 401);
       }
@@ -45,8 +45,8 @@ const authController = {
       });
 
       return res.status(200).json({
-        data: payload,
-        access_token,
+        data: { ...payload, access_token },
+
       });
     } catch (error) {
       handleError(res, error);
