@@ -22,7 +22,7 @@ const bookingsController = {
 
     try {
       const checkBooking = await bookingModel.checkBooking(req.body)
-      console.log(checkBooking)
+
       if (checkBooking.length > 0) {
         return handleResponse(res, "Your room booking time clashes with other", 400);
       }
@@ -43,13 +43,15 @@ const bookingsController = {
 
     try {
       const { id } = req.params
-      const { id_room, start, end, meeting_name } = req.body
+      const { id_room, start, end, meeting_name, status } = req.body
+
       const checkBooking = await bookingModel.checkBooking(req.body, id)
+
       if (checkBooking.length > 0) {
         return handleResponse(res, "Your room booking time clashes with other", 400);
       }
 
-      await bookingModel.update(id, { id_room, start, end, meeting_name })
+      await bookingModel.update(id, { id_room, start, end, meeting_name, status })
       return handleResponse(res, "Success", 200, req.body)
 
     } catch (error) {

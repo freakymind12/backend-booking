@@ -4,11 +4,11 @@ const authMiddleware = require('../middleware/auth.js')
 
 const router = express.Router();
 
-router.get("/", authMiddleware.authenticateToken, bookingsController.get)
+router.get("/", bookingsController.get)
 
 router.post("/", authMiddleware.authenticateToken, bookingsController.create)
 
-router.patch("/:id", authMiddleware.authenticateToken, bookingsController.update)
+router.patch("/:id", bookingsController.update)
 
 router.delete("/:id", authMiddleware.authenticateToken, bookingsController.delete)
 
