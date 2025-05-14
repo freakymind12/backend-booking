@@ -12,7 +12,7 @@ const validationCheck = [
   check("description").notEmpty().withMessage("Description is required"),
 ]
 
-router.get("/", authenticateToken, roomsController.get)
+router.get("/", roomsController.get)
 
 router.post("/", authenticateToken, validationCheck, roomsController.create)
 
