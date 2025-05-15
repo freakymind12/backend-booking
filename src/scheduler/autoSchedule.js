@@ -18,6 +18,14 @@ const schedule = [
     meeting_name: "Production Meeting",
     start: '13:00:00',
     end: "14:00:00"
+  },
+  {
+    id_room:'2efd7ba5-219e-11f0-8cbf-066f82d8bae1',
+    day: 'Thursday',
+    id_user: 2,
+    meeting_name: "Ichinoseki Plating Weekly Meeting",
+    start:'11:00:00',
+    end: "12:00:00"
   }
 ]
 
@@ -45,7 +53,6 @@ const newSchedule = async () => {
           // tampilkan success pada log
           console.log(`${dayjs().format('YYYY-MM-DD HH:mm:ss')} ->  Success add booking for ${item.meeting_name} on ${dayjs().format('YYYY-MM-DD')} at ${item.start} - ${item.end}`)
         }
-
       }
     }
   } catch (error) {
