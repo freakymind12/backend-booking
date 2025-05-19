@@ -1,7 +1,13 @@
+require('dotenv').config();
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 const userModel = require("../models/users");
+const mailService = require("../services/mailer")
+const mailTemplate = require("../utils/forgotPasswordMail")
+const security = require("../utils/crypto")
 const { handleResponse, handleError } = require("../utils/responseUtils");
+const { validationResult } = require('express-validator');
+
 
 const authController = {
   loginUser: async (req, res) => {
@@ -73,6 +79,62 @@ const authController = {
     });
     handleResponse(res, "Logout Success");
   },
+
+  forgotPassword: async (req, res) => {
+    try {
+      const { email } = req.body
+      const [user] = await userModel.getUser(req.body);
+
+      if (!user) {
+        return handleResponse(res, "Email is not registered", 401);
+      }
+
+      const encryptedUser = security.encryptJSON(user)
+
+      const queryString = new URLSearchParams(encryptedUser).toString()
+
+      const link = `http://${process.env.HOST}:${process.env.FE_PORT}/recover-password?${queryString}`
+
+      const mailOptions = {
+        to: email,
+        subject: 'Password Recovery',
+        text: 'This is your password recovery request link',
+        html: mailTemplate(link)
+      }
+
+      await mailService.sendMail(mailOptions)
+      
+
+      handleResponse(res, "Success", 200)
+    } catch (error) {
+      handleError(res, error)
+    }
+  },
+
+  recoverPassword: async (req, res) => {
+    const errors = validationResult(req);
+
+    if (!errors.isEmpty()) {
+      return handleResponse(res, errors.array()[0].msg, 400);
+    }
+
+    try {
+      const { iv, data } = req.query
+      const { password } = req.body
+
+      const user = security.decryptJSON(data, iv)
+
+      const hashedPassword = await bcrypt.hash(password, 10);
+      
+      userModel.updateUser(user.id_user, { password: hashedPassword })
+      handleResponse(res, 'Success', 200)
+    } catch (error) {
+      if (error.message === 'Token has expired') {
+        return handleResponse(res, error.message, 400);
+      }
+      handleError(res, error)
+    }
+  }
 };
 
 module.exports = authController
