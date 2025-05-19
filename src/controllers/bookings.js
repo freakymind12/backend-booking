@@ -1,6 +1,8 @@
 const { validationResult } = require("express-validator");
 const { handleError, handleResponse } = require("../utils/responseUtils");
 const bookingModel = require("../models/bookings");
+const autoScheduleModel = require("../models/auto_schedule");
+const dayjs = require("dayjs");
 
 
 const bookingsController = {
@@ -21,11 +23,21 @@ const bookingsController = {
     }
 
     try {
+      const { id_room, start, end } = req.body
+      const day = dayjs(start).format("dddd")
       const checkBooking = await bookingModel.checkBooking(req.body)
 
-      if (checkBooking.length > 0) {
-        return handleResponse(res, "Your room booking time clashes with other", 400);
+      const chechAutoSchedule = await autoScheduleModel.checkConflict({
+        id_room,
+        day,
+        start: start.split(" ")[1].slice(0, 5),
+        end: end.split(" ")[1].slice(0, 5)
+      })
+
+      if (checkBooking.length > 0 || chechAutoSchedule.length > 0) {
+        return handleResponse(res, "Sorry, there's a scheduling conflict. Please check the room's availability.", 400);
       }
+
 
       await bookingModel.create(req.body)
       return handleResponse(res, "Success", 200, req.body);
@@ -44,11 +56,18 @@ const bookingsController = {
     try {
       const { id } = req.params
       const { id_room, start, end, meeting_name, status } = req.body
+      const day = dayjs(start).format("dddd")
 
       const checkBooking = await bookingModel.checkBooking(req.body, id)
+      const chechAutoSchedule = await autoScheduleModel.checkConflict({
+        id_room,
+        day,
+        start: start.split(" ")[1].slice(0, 5),
+        end: end.split(" ")[1].slice(0, 5)
+      })
 
-      if (checkBooking.length > 0) {
-        return handleResponse(res, "Your room booking time clashes with other", 400);
+      if (checkBooking.length > 0 || chechAutoSchedule.length > 0) {
+        return handleResponse(res, "Sorry, there's a scheduling conflict. Please check the room's availability.", 400);
       }
 
       await bookingModel.update(id, { id_room, start, end, meeting_name, status })

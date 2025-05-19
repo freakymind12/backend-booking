@@ -19,6 +19,18 @@ const autoScheduleModel = {
       .join("users as u", "a.id_user", "u.id_user")
       .join("rooms as r", "a.id_room", "r.id_room")
       .orderBy("a.day", "asc")
+  },
+
+  checkConflict: (filters = {}) => {
+    const { id_room, day, start, end } = filters
+    return dbPool("auto_schedule")
+      .select("*")
+      .where("id_room", id_room)
+      .andWhere("day", day)
+      .andWhere(function () {
+        this.where("start", "<", end)
+          .andWhere("end", ">", start)
+      })
   }
 }
 

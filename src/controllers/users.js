@@ -124,7 +124,6 @@ const userController = {
       handleError(res, error);
     }
   },
-
 };
 
 module.exports = userController;
