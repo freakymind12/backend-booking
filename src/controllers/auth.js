@@ -103,7 +103,7 @@ const authController = {
       }
 
       await mailService.sendMail(mailOptions)
-      
+
 
       handleResponse(res, "Success", 200)
     } catch (error) {
@@ -125,8 +125,9 @@ const authController = {
       const user = security.decryptJSON(data, iv)
 
       const hashedPassword = await bcrypt.hash(password, 10);
+
+      await userModel.updateUser(user.id_user, { password: hashedPassword })
       
-      userModel.updateUser(user.id_user, { password: hashedPassword })
       handleResponse(res, 'Success', 200)
     } catch (error) {
       if (error.message === 'Token has expired') {
