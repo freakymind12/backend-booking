@@ -10,7 +10,7 @@ const userController = {
     if (!errors.isEmpty()) {
       return handleResponse(res, { errors: errors.array() }, 400);
     }
-    const { email, username, password } = req.body;
+    const { email, username, password, dept } = req.body;
     try {
       const [existingUser] = await userModel.getUser({ email });
 
@@ -24,6 +24,7 @@ const userController = {
         email,
         username,
         password: hashedPassword,
+        dept
       });
       handleResponse(res, "Registration success", 200, { email, username });
     } catch (error) {

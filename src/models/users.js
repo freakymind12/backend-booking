@@ -1,12 +1,13 @@
 const dbPool = require("../config/knex");
 
 const userModel = {
-  createUser: ({ username, email, password }) =>
+  createUser: ({ username, email, password, dept }) =>
     dbPool("users").insert({
       username,
       email,
       password,
       roles: "viewer",
+      dept 
     }),
 
   updateUser: (id_user, data) => {
