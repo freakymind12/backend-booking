@@ -55,7 +55,7 @@ const bookingsController = {
 
     try {
       const { id } = req.params
-      const { id_room, start, end, meeting_name, status } = req.body
+      const { id_room, start, end, meeting_name, status, confirmation } = req.body
       const day = dayjs(start).format("dddd")
 
       const checkBooking = await bookingModel.checkBooking(req.body, id)
@@ -66,8 +66,11 @@ const bookingsController = {
         end: end.split(" ")[1].slice(0, 5)
       })
 
-      if (checkBooking.length > 0 || chechAutoSchedule.length > 0) {
-        return handleResponse(res, "Sorry, there's a scheduling conflict. Please check the room's availability.", 400);
+
+      if (!confirmation) { // By pass checking auto schedule apabila hanya update konfirmasi kehadiran
+        if (checkBooking.length > 0 || chechAutoSchedule.length > 0) {
+          return handleResponse(res, "Sorry, there's a scheduling conflict. Please check the room's availability.", 400);
+        }
       }
 
       await bookingModel.update(id, { id_room, start, end, meeting_name, status })
