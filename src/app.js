@@ -31,7 +31,7 @@ app.use(helmet());
 app.use(middlewareHandle.errorMessage) // error message
 app.use(middlewareHandle.logRequest) // log request
 app.use(cors({
-  origin: ['http://localhost:5173', 'http://192.168.148.125:5173', 'http://localhost:4175', 'http://192.168.148.125:4175'], // ganti untuk alamat frontend nya 
+  origin: ['http://192.168.148.201:4173', 'http://192.168.148.125:5173'], // ganti untuk alamat frontend nya 
   credentials: true
 }));
 // app.options('*', cors())
